@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+<h2>User Login</h2>
+
+<form id="loginForm">
+    <label>Username:</label><br>
+    <input type="text" id="username" name="username" required><br><br>
+
+    <label>Password:</label><br>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <input type="submit" value="Login">
+</form>
+
+<div id="message"></div>
+
+<script>
+    const form = document.getElementById("loginForm");
+    const messageDiv = document.getElementById("message");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();  // Prevent full-page reload
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const formData = new URLSearchParams();
+        formData.append("username", username);
+        formData.append("password", password);
+
+        const response = await fetch("/login", {
+            method: "POST",
+            body: formData,
+            credentials: "include"  // Important to send/receive cookies
+        });
+
+        if (response.ok) {
+            // Success → redirect or update DOM
+            messageDiv.innerHTML = "<p style='color:green;'>Login successful!</p>";
+            setTimeout(() => {
+                window.location.href = "/dashboard"; // Navigate to dashboard
+            }, 1000);
+        } else {
+            // Show error message
+            messageDiv.innerHTML = "<p style='color:red;'>Incorrect username or password!</p>";
+        }
+    });
+</script>
+
+</body>
+</html>
+
+
+
